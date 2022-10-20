@@ -36,14 +36,16 @@ void loop() {
   gyro_z = Wire.read()<<8 | Wire.read(); // reading registers: 0x47 (GYRO_ZOUT_H) and 0x48 (GYRO_ZOUT_L)
   
   // print out data
-  Serial.print("aX = "); Serial.print(accelerometer_x);
+  Serial.print(" | aX = "); Serial.print(accelerometer_x);
+  Serial.print(" | aY = "); Serial.print(accelerometer_y);
+  Serial.print(" | aZ = "); Serial.print(accelerometer_z);
   //Serial.print(" | aY = "); Serial.print(convert_int16_to_str(accelerometer_y));
   //Serial.print(" | aZ = "); Serial.print(convert_int16_to_str(accelerometer_z));
   // the following equation was taken from the documentation [MPU-6000/MPU-6050 Register Map and Description, p.30]
-  //Serial.print(" | tmp = "); Serial.print(temperature/340.00+36.53);
-  //Serial.print(" | gX = "); Serial.print(convert_int16_to_str(gyro_x));
-  //Serial.print(" | gY = "); Serial.print(convert_int16_to_str(gyro_y));
-  //Serial.print(" | gZ = "); Serial.print(convert_int16_to_str(gyro_z));
+  Serial.print(" | tmp = "); Serial.print(temperature/340.00+36.53);
+  Serial.print(" | gX = "); Serial.print(gyro_x);
+  Serial.print(" | gY = "); Serial.print(gyro_y);
+  Serial.print(" | gZ = "); Serial.print(gyro_z);
   Serial.println();
-  vTaskDelay(1000);
+  vTaskDelay(500);
 }
