@@ -1,40 +1,50 @@
 #include <Arduino.h>
 #include "PrintStream.h"
-
-#define INB1 13
-#define INB2 27
-#define PWMB 14
+#include "motor_driver.h"
 
 #define OUTA 36
 #define OUTB 39
 
-#define MAX_PWM 255
+bool OUTA_val1 = digitalRead(OUTA);
+bool OUTA_val2 = digitalRead(OUTA);
+bool OUTB_val1 = digitalRead(OUTB);
+int32_t counter = 0;
+
+void update_pos(){
+  OUTA_val1 = digitalRead(OUTA);
+  if (OUTA_val1 != OUTA_val2){
+    if (OUTB_val1 == OUTA_val1){
+      counter ++;
+    }
+    else{
+      counter --;
+    }
+  }
+  OUTA_val2 = OUTA_val1;
+}
+
+
 
 void setup() {
   Serial.begin (115200);
   while (!Serial) 
   {
   }
-  //Motor Setup
-  pinMode(INB1, OUTPUT);
-  digitalWrite(INB1, HIGH);
-
-  pinMode(INB2, OUTPUT);
-  digitalWrite(INB2, LOW);
-
-  pinMode(PWMB, OUTPUT);
-
-  Serial << "That's one spinny boi" << endl;
+  MotorDriver motor;
+  motor.set_duty(-50);
 
   //Encoder Setup
   pinMode(OUTA, INPUT);
   pinMode(OUTB, INPUT);
+
+  OUTA_val2 = digitalRead(OUTA);
+  attachInterrupt(OUTA, update_pos, CHANGE);
+  attachInterrupt(OUTB, update_pos, CHANGE);
 }
 
+
 void loop() {
+  vTaskDelay(500);
+  Serial << counter << endl;
   // put your main code here, to run repeatedly:
-  analogWrite(PWMB, 0);
-  vTaskDelay(2000);
-  analogWrite(PWMB, 0);
-  vTaskDelay(2000);
 }
