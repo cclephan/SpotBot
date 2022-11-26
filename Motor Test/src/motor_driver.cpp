@@ -23,11 +23,13 @@ MotorDriver::MotorDriver (void)
 void MotorDriver::set_duty(int16_t duty)
 {
     if (duty >= 0){
+        //Positive duty = CW = positive position
         digitalWrite(INB1, HIGH);
         digitalWrite(INB2, LOW);
         analogWrite(PWMB, duty);
     }
     else{
+        //Negative duty = CCW = negative position
         digitalWrite(INB1, LOW);
         digitalWrite(INB2, HIGH);
         analogWrite(PWMB, -duty); 
